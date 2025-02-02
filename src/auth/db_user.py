@@ -10,4 +10,4 @@ async def get_user(email):
 
     async with db_helper.async_session() as session:
         result = await session.scalars(stmt)
-    return result
+    return result.one()

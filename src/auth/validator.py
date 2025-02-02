@@ -1,7 +1,8 @@
 import jwt
 from fastapi import Depends, HTTPException, status
-from src.auth.utils import auth2_bearer, decode_jwt
-from src.auth.schemas import User
+from src.auth.utils import auth2_bearer
+from src.auth.jwt_helper import decode_jwt
+from src.auth.schemas import UserSchema
 from src.auth.db_user import get_user
 
 
@@ -18,7 +19,7 @@ def get_current_token_payload(
         )
 
 
-def get_user_by_token_sub(payload: dict) -> User:
+def get_user_by_token_sub(payload: dict) -> UserSchema:
     """
     Returns the user by his sub
     """
@@ -33,6 +34,6 @@ def get_user_by_token_sub(payload: dict) -> User:
 
 def get_auth_user_from_token(
     payload: dict = Depends(get_current_token_payload),
-) -> User:
+) -> UserSchema:
 
     return get_user_by_token_sub(payload)
