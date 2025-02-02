@@ -15,7 +15,7 @@ class User(Base):
     fullname: Mapped[str] = mapped_column(String(30))
     password: Mapped[str] = mapped_column(String, nullable=False)
     status: Mapped[str] = mapped_column(String(10))
-    email: Mapped[str] = mapped_column(String, nullable=False)
+    email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     accounts: Mapped[List["Account"]] = relationship("Account", back_populates="user")
     create_at: Mapped[DateTime] = mapped_column(
         DateTime, default=lambda: datetime.now(timezone.utc), nullable=False
