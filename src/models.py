@@ -4,7 +4,7 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
-from database import Base
+from src.database import Base
 from datetime import datetime, timezone
 
 
@@ -28,8 +28,8 @@ class Account(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     balance: Mapped[float] = mapped_column(nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    transaction: Mapped[List["Account"]] = relationship(
-        "User", back_populates="accounts"
+    transaction: Mapped[List["Transaction"]] = relationship(
+        "Transaction", back_populates="accounts"
     )
     create_at: Mapped[DateTime] = mapped_column(
         DateTime, default=lambda: datetime.now(timezone.utc), nullable=False

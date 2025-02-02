@@ -19,25 +19,12 @@ class DataBaseHelper:
             url=url,
             echo=echo,
         )
-        self.async_session_factory = async_sessionmaker(
+        self.async_session = async_sessionmaker(
             self.async_engine,
             autoflush=False,
             autocommit=False,
             expire_on_commit=False,
         )
-
-    async def get_scoped_session(self):
-
-        session = async_scoped_session(
-            session_factory=self.async_session_factory,
-            scopefunc=current_task,
-        )
-        return session
-
-    async def scope_session_dependency(self) -> AsyncSession:
-
-        async with self.get_scoped_session() as session:
-            yield session
 
 
 db_helper = DataBaseHelper(
