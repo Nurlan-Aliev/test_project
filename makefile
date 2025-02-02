@@ -3,3 +3,6 @@ migration:
 
 migrate:
 	alembic upgrade head
+
+dev:
+	uvicorn src.main:app --reload
