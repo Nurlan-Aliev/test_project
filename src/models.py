@@ -40,7 +40,7 @@ class Transaction(Base):
     __tablename__ = "transactions"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    balance: Mapped[float] = mapped_column(nullable=False)
+    amount: Mapped[float] = mapped_column(nullable=False)
     account_id: Mapped[int] = mapped_column(ForeignKey("accounts.id"))
     create_at: Mapped[DateTime] = mapped_column(
         DateTime, default=lambda: datetime.now(timezone.utc), nullable=False
