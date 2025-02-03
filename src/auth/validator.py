@@ -2,7 +2,7 @@ import jwt
 from fastapi import Depends, HTTPException, status
 from src.auth.utils import auth2_bearer
 from src.auth.jwt_helper import decode_jwt
-from src.auth.schemas import UserSchema
+from src.auth.schemas import UserAuthSchema
 from src.auth.db_user import get_user
 
 
@@ -19,21 +19,29 @@ def get_current_token_payload(
         )
 
 
-def get_user_by_token_sub(payload: dict) -> UserSchema:
+async def get_user_by_token_sub(payload: dict) -> UserAuthSchema:
     """
     Returns the user by his sub
     """
-    username: str | None = payload.get("email")
-    if user := get_user(username):
+    email: str | None = payload.get("email")
+    if user := await get_user(email):
         return user
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="token not found (user not found)",
+        detail="user not found",
     )
 
 
-def get_auth_user_from_token(
+async def get_auth_user_from_token(
     payload: dict = Depends(get_current_token_payload),
-) -> UserSchema:
+) -> UserAuthSchema:
+    return await get_user_by_token_sub(payload)
 
-    return get_user_by_token_sub(payload)
+
+def get_pages_by_status(user: UserAuthSchema = Depends(get_user_by_token_sub)):
+
+    if user.status == "admin":
+        return True
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN, detail="not enough rights"
+    )

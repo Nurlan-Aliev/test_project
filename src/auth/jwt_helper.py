@@ -1,11 +1,11 @@
 from datetime import timedelta, datetime, UTC
 import jwt
 from settings import settings
-from src.auth.schemas import UserSchema
+from src.auth.schemas import UserAuthSchema
 
 
 def create_jwt(
-    user: UserSchema,
+    user: UserAuthSchema,
 ) -> str:
 
     jwt_pyload = {"email": user.email, "status": user.status}
