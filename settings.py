@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     DB_HOST: str
 
     SECRET_KEY: str
+    algorithm: str = "HS256"
+    access_token_expire_min: int = 1140
 
     @property
     def db_connect(self):

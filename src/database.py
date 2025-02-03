@@ -14,12 +14,12 @@ class Base(DeclarativeBase):
 
 
 class DataBaseHelper:
-    def __init__(self, url, echo=False):
+    def __init__(self, url: str, echo=False):
         self.async_engine = create_async_engine(
             url=url,
             echo=echo,
         )
-        self.async_session_factory = async_sessionmaker(
+        self.async_session = async_sessionmaker(
             self.async_engine,
             autoflush=False,
             autocommit=False,

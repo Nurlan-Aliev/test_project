@@ -3,7 +3,7 @@ from sqlalchemy import String, LargeBinary, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
-from database import Base
+from src.database import Base
 from datetime import datetime, timezone
 
 
@@ -13,8 +13,8 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     fullname: Mapped[str] = mapped_column(String(30))
     password: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
-    status: Mapped[str] = mapped_column(String(10))
-    email: Mapped[str] = mapped_column(String, nullable=False)
+    status: Mapped[str] = mapped_column(String(10), default="user")
+    email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     accounts: Mapped[List["Account"]] = relationship("Account", back_populates="user")
     create_at: Mapped[DateTime] = mapped_column(
         DateTime,
