@@ -13,7 +13,7 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     fullname: Mapped[str] = mapped_column(String(30))
     password: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
-    status: Mapped[str] = mapped_column(String(10))
+    status: Mapped[str] = mapped_column(String(10), default="user")
     email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     accounts: Mapped[List["Account"]] = relationship("Account", back_populates="user")
     create_at: Mapped[DateTime] = mapped_column(
