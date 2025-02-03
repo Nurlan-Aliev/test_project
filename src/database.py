@@ -14,7 +14,7 @@ class Base(DeclarativeBase):
 
 
 class DataBaseHelper:
-    def __init__(self, url, echo=False):
+    def __init__(self, url: str, echo=False):
         self.async_engine = create_async_engine(
             url=url,
             echo=echo,
