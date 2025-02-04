@@ -2,6 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 from src.database import db_helper
 from src.models import User, Account
+from src.user.schema import CreateUserSchemas
 
 
 async def create_account(email, balance):
@@ -13,6 +14,14 @@ async def create_account(email, balance):
     )
     async with db_helper.async_session() as session:
         session.add(spongebob)
+        await session.commit()
+
+
+async def create_new_user(user: CreateUserSchemas):
+    user = user.model_dump()
+    new_user = User(**user)
+    async with db_helper.async_session() as session:
+        session.add(new_user)
         await session.commit()
 
 
