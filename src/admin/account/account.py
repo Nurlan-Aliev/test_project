@@ -1,21 +1,18 @@
-from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from src.auth.login import http_bearer
-from src.auth.validator import get_current_token_payload, is_admin
-from src.account.crud import (
+from src.auth.validator import is_admin
+from src.admin.account.crud import (
     create_new_account,
     update_account,
     delete_account,
 )
-from src.account.schemas import CreateAccount, AccountSchema
+from src.admin.account.schemas import CreateAccount, AccountSchema
 
 
-router = APIRouter(
-    tags=["Account"], dependencies=[Depends(http_bearer), Depends(is_admin)]
-)
+router = APIRouter()
 
 
-@router.post("/create_acc")
+@router.post("/")
 async def create_acc(
     account: CreateAccount,
 ):
@@ -23,7 +20,7 @@ async def create_acc(
     return AccountSchema(id=acc.id, balance=acc.balance)
 
 
-@router.patch("/update_acc")
+@router.patch("/")
 async def update_acc(
     account: AccountSchema,
 ):
@@ -35,7 +32,7 @@ async def update_acc(
     )
 
 
-@router.delete("/delete_acc")
+@router.delete("/")
 async def delete_acc(account: AccountSchema):
 
     acc = await delete_account(account)

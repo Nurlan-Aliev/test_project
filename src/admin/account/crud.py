@@ -2,9 +2,9 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from starlette import status
 from src.database import db_helper
-from src.models import User, Account
+from src.models import Account
 from src.user.crud import get_user
-from src.account.schemas import (
+from src.admin.account.schemas import (
     AccountSchema,
     CreateAccount,
 )
