@@ -8,7 +8,11 @@ def create_jwt(
     user: UserAuthSchema,
 ) -> str:
 
-    jwt_pyload = {"email": user.email, "status": user.status}
+    jwt_pyload = {
+        "email": user.email,
+        "status": user.status,
+        "is_active": user.is_active,
+    }
 
     return encode_jwt(
         payload=jwt_pyload,
