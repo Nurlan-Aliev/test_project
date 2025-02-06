@@ -48,8 +48,16 @@ def get_pages_by_status(user: UserAuthSchema = Depends(get_user_by_token_sub)):
 
 
 def is_admin(payload: dict = Depends(get_current_token_payload)):
-    if payload.get("status") == "admin":
+    if is_active(payload) and payload.get("status") == "admin":
         return payload
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN, detail="You don’t have permission"
+    )
+
+
+def is_active(payload: dict = Depends(get_current_token_payload)):
+    if payload.get("is_active"):
+        return payload
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN, detail="user is not active"
     )

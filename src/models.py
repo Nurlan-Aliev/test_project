@@ -1,5 +1,5 @@
 from typing import List
-from sqlalchemy import String, LargeBinary, DateTime, ForeignKey
+from sqlalchemy import String, LargeBinary, DateTime, ForeignKey, text
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -15,6 +15,7 @@ class User(Base):
     password: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
     status: Mapped[str] = mapped_column(String(10), default="user")
     email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
+    is_active: Mapped[bool] = mapped_column(server_default=text("true"), default=True)
     accounts: Mapped[List["Account"]] = relationship("Account", back_populates="user")
     create_at: Mapped[DateTime] = mapped_column(
         DateTime,
@@ -30,7 +31,7 @@ class Account(Base):
     balance: Mapped[float] = mapped_column(nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped["User"] = relationship("User", back_populates="accounts")
-
+    is_active: Mapped[bool] = mapped_column(server_default=text("true"), default=True)
     transactions: Mapped[List["Transaction"]] = relationship(
         "Transaction", back_populates="account"
     )
