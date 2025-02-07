@@ -6,7 +6,7 @@ from src.admin.account.crud import (
     update_account,
     delete_account,
 )
-from src.admin.account.schemas import CreateAccount, AccountSchema
+from src.admin.account import schemas
 
 
 router = APIRouter()
@@ -14,15 +14,17 @@ router = APIRouter()
 
 @router.post("/")
 async def create_acc(
-    account: CreateAccount,
+    account: schemas.CreateAccount,
 ):
     acc = await create_new_account(account)
-    return AccountSchema(id=acc.id, balance=acc.balance)
+    if acc:
+        return schemas.AccountSchema(id=acc.id, balance=acc.balance)
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="user not found")
 
 
 @router.patch("/")
 async def update_acc(
-    account: AccountSchema,
+    account: schemas.AccountSchema,
 ):
     acc = await update_account(account)
     if acc:
@@ -32,10 +34,7 @@ async def update_acc(
     )
 
 
-@router.delete("/")
-async def delete_acc(account: AccountSchema):
+@router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_acc(account: schemas.DeleteAccountSchemas):
 
-    acc = await delete_account(account)
-    if acc:
-        return f"{acc.id} was deleted"
-    return f"account is not exist"
+    await delete_account(account)

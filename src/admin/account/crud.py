@@ -4,13 +4,10 @@ from starlette import status
 from src.database import db_helper
 from src.models import Account
 from src.user.crud import get_user
-from src.admin.account.schemas import (
-    AccountSchema,
-    CreateAccount,
-)
+from src.admin.account import schemas
 
 
-async def create_new_account(account: CreateAccount) -> Account:
+async def create_new_account(account: schemas.CreateAccount) -> Account:
     user = await get_user(account.email)
     if user:
         account = Account(
@@ -22,10 +19,9 @@ async def create_new_account(account: CreateAccount) -> Account:
             session.add(account)
             await session.commit()
         return account
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="user not found")
 
 
-async def update_account(account: AccountSchema):
+async def update_account(account: schemas.AccountSchema):
     stmt = select(Account).where(Account.id == account.id)
 
     async with db_helper.async_session() as session:
@@ -37,11 +33,10 @@ async def update_account(account: AccountSchema):
             return acc
 
 
-async def delete_account(account: AccountSchema):
+async def delete_account(account: schemas.DeleteAccountSchemas):
     async with db_helper.async_session() as session:
         acc = await session.get(Account, account.id)
         if acc:
             await session.delete(acc)
             await session.commit()
             return acc
-    return None

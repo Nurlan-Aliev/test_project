@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class BaseAccountSchemas(BaseModel):
@@ -6,8 +6,12 @@ class BaseAccountSchemas(BaseModel):
 
 
 class CreateAccount(BaseAccountSchemas):
-    email: str
+    email: EmailStr
 
 
 class AccountSchema(BaseAccountSchemas):
+    id: int
+
+
+class DeleteAccountSchemas(BaseModel):
     id: int
