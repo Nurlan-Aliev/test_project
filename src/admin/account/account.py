@@ -15,10 +15,10 @@ router = APIRouter()
 @router.post("/")
 async def create_acc(
     account: schemas.CreateAccount,
-):
+) -> schemas.AccountSchema:
     acc = await create_new_account(account)
     if acc:
-        return schemas.AccountSchema(id=acc.id, balance=acc.balance)
+        return acc
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="user not found")
 
 

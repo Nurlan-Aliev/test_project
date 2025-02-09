@@ -15,7 +15,7 @@ async def get_accounts(user_email: str) -> list:
         select(Account)
         .join(User)
         .where(User.email == user_email)
-        .where(User.is_active == True)
+        .where(Account.is_active == True)
     )
     async with db_helper.async_session() as session:
         result = await session.scalars(stmt)

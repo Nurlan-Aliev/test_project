@@ -11,6 +11,7 @@ class CreateAccount(BaseAccountSchemas):
 
 class AccountSchema(BaseAccountSchemas):
     id: int
+    is_active: bool
 
 
 class DeleteAccountSchemas(BaseModel):

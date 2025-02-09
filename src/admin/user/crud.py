@@ -2,6 +2,14 @@ from sqlalchemy import select, update
 from src.admin.user import schema
 from src.database import db_helper
 from src.models import User, Account
+from sqlalchemy.orm import subqueryload
+
+
+async def get_users() -> User:
+    stmt = select(User).options(subqueryload(User.accounts))
+    async with db_helper.async_session() as session:
+        users = await session.scalars(stmt)
+        return users.all()
 
 
 async def create_new_user(user: schema.CreateUserSchemas):

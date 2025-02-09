@@ -12,6 +12,12 @@ class UserSchemas(BaseModel):
     email: EmailStr
 
 
+class ReadUserSchema(UserSchemas):
+    id: int
+    is_active: bool
+    accounts: list
+
+
 class CreateUserSchemas(UserSchemas):
     password: str | bytes
 

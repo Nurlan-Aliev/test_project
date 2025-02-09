@@ -1,10 +1,31 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, HTTPException
 from starlette import status
 from src.auth.utils import hash_password
 from src.admin.user import crud
 from src.admin.user import schema
+from src.admin.account.schemas import AccountSchema
 
 router = APIRouter()
+
+
+@router.get("/")
+async def get_user_list():
+    users = await crud.get_users()
+
+    return [
+        schema.ReadUserSchema(
+            id=user.id,
+            fullname=user.fullname,
+            email=user.email,
+            is_active=user.is_active,
+            status=user.status,
+            accounts=[
+                AccountSchema(id=acc.id, balance=acc.balance, is_active=acc.is_active)
+                for acc in list(user.accounts)
+            ],
+        )
+        for user in list(users)
+    ]
 
 
 @router.post("/")

@@ -28,4 +28,7 @@ async def get_user_accounts(
 ) -> List[AccountSchema]:
     email = payload.get("email")
     accounts = await get_accounts(email)
-    return [AccountSchema(id=acc.id, balance=acc.balance) for acc in accounts]
+    return [
+        AccountSchema(id=acc.id, balance=acc.balance, is_active=acc.is_active)
+        for acc in accounts
+    ]

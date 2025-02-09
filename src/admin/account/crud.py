@@ -37,6 +37,6 @@ async def delete_account(account: schemas.DeleteAccountSchemas):
     async with db_helper.async_session() as session:
         acc = await session.get(Account, account.id)
         if acc:
-            await session.delete(acc)
+            acc.is_active = False
             await session.commit()
             return acc
