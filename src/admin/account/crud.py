@@ -1,6 +1,4 @@
-from fastapi import HTTPException
 from sqlalchemy import select
-from starlette import status
 from src.database import db_helper
 from src.models import Account
 from src.user.crud import get_user

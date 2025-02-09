@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from src.auth.login import http_bearer
 from src.auth.validator import is_admin
-from src.admin.account.account import router as account_router
-from src.admin.user.user import router as user_router
+from src.admin.account.account_router import router as account_router
+from src.admin.user.user_router import router as user_router
 
 
 router = APIRouter(

@@ -1,6 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from src.auth.login import http_bearer
-from src.auth.validator import is_admin
+from fastapi import APIRouter, HTTPException, status
 from src.admin.account.crud import (
     create_new_account,
     update_account,
