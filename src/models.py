@@ -47,6 +47,7 @@ class Transaction(Base):
     __tablename__ = "transactions"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    transaction_id: Mapped[str] = mapped_column(nullable=False)
     amount: Mapped[float] = mapped_column(nullable=False)
     account_id: Mapped[int] = mapped_column(ForeignKey("accounts.id"))
     account: Mapped["Account"] = relationship("Account", back_populates="transactions")
