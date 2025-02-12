@@ -1,19 +1,21 @@
 """empty message
 
-Revision ID: da4d9f629097
+Revision ID: cdc99aebccee
 Revises:
-Create Date: 2025-02-04 13:14:06.458322
+Create Date: 2025-02-11 13:59:18.669095
 
 """
 
+import datetime as dt
 from typing import Sequence, Union
-
 from alembic import op
+from sqlalchemy.sql import table, column
 import sqlalchemy as sa
 
+from src.database import Base
 
 # revision identifiers, used by Alembic.
-revision: str = "da4d9f629097"
+revision: str = "cdc99aebccee"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -28,6 +30,12 @@ def upgrade() -> None:
         sa.Column("password", sa.LargeBinary(), nullable=False),
         sa.Column("status", sa.String(length=10), nullable=False),
         sa.Column("email", sa.String(), nullable=False),
+        sa.Column(
+            "is_active",
+            sa.Boolean(),
+            server_default=sa.text("true"),
+            nullable=False,
+        ),
         sa.Column("create_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("email"),
@@ -37,6 +45,12 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("balance", sa.Float(), nullable=False),
         sa.Column("user_id", sa.Integer(), nullable=False),
+        sa.Column(
+            "is_active",
+            sa.Boolean(),
+            server_default=sa.text("true"),
+            nullable=False,
+        ),
         sa.Column("create_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
             ["user_id"],
@@ -47,6 +61,7 @@ def upgrade() -> None:
     op.create_table(
         "transactions",
         sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("transaction_id", sa.String(), nullable=False),
         sa.Column("amount", sa.Float(), nullable=False),
         sa.Column("account_id", sa.Integer(), nullable=False),
         sa.Column("create_at", sa.DateTime(), nullable=False),
@@ -56,6 +71,51 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id"),
     )
+    meta = Base.metadata
+    meta.reflect(only=("users",), bind=op.get_bind())
+
+    users_table = sa.Table("users", meta)
+
+    op.bulk_insert(
+        users_table,
+        [
+            {
+                "fullname": "Dayneris Targarien",
+                "password": b"$2b$12$FzJ0NK2ZBx64l80/.Ph6mOTOZZeQ7QSNMwELpjGIC/6OO0TeDx48W",
+                "status": "admin",
+                "email": "dayneris@queen.com",
+                "is_active": True,
+                "create_at": dt.datetime.now(dt.timezone.utc).replace(
+                    microsecond=0, tzinfo=None
+                ),
+            },
+            {
+                "fullname": "Tirion Lanister",
+                "password": b"$2b$12$XBxLCDKjRHS9fi/o36nQQu7zZLLIAQdye26B4HNAoYa1B7cZccLNq",
+                "status": "user",
+                "email": "tirion@lanister.com",
+                "is_active": True,
+                "create_at": dt.datetime.now(dt.timezone.utc).replace(
+                    microsecond=0, tzinfo=None
+                ),
+            },
+        ],
+    )
+
+    account_table = sa.Table("accounts", meta)
+    op.bulk_insert(
+        account_table,
+        [
+            {
+                "balance": 1000,
+                "user_id": 2,
+                "create_at": dt.datetime.now(dt.timezone.utc).replace(
+                    microsecond=0, tzinfo=None
+                ),
+            }
+        ],
+    )
+
     # ### end Alembic commands ###
 
 
