@@ -1,16 +1,24 @@
-from asyncio import current_task
 from settings import settings
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     async_sessionmaker,
-    async_scoped_session,
 )
+from sqlalchemy import DateTime
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+from datetime import datetime, timezone
 
 
 class Base(DeclarativeBase):
-    pass
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    create_at: Mapped[DateTime] = mapped_column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc).replace(microsecond=0, tzinfo=None),
+        nullable=False,
+    )
 
 
 class DataBaseHelper:
