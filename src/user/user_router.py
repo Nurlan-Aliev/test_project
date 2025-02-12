@@ -6,7 +6,7 @@ from src.auth.login import http_bearer
 from src.admin.user.schema import UserSchemas
 from src.user.crud import get_user, get_accounts
 
-router = APIRouter(tags=["Users"])
+router = APIRouter(tags=["Users"], dependencies=[Depends(http_bearer)])
 
 
 @router.get("/me")
