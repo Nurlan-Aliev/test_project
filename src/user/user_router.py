@@ -13,8 +13,8 @@ router = APIRouter(tags=["Users"], dependencies=[Depends(http_bearer)])
 async def get_me(
     payload: dict = Depends(is_active),
 ) -> UserSchemas:
-    email = payload.get("email")
-    user = await get_user(email)
+    idx = payload.get("id")
+    user = await get_user(idx)
     return UserSchemas(
         fullname=user.fullname,
         status=user.status,
@@ -26,8 +26,8 @@ async def get_me(
 async def get_user_accounts(
     payload: dict = Depends(is_active),
 ) -> List[AccountSchema]:
-    email = payload.get("email")
-    accounts = await get_accounts(email)
+    idx = payload.get("id")
+    accounts = await get_accounts(idx)
     return [
         AccountSchema(id=acc.id, balance=acc.balance, is_active=acc.is_active)
         for acc in accounts

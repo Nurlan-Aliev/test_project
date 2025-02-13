@@ -47,6 +47,7 @@ async def create_user(
 
 @router.patch("/")
 async def update_user(user: schema.UpdateUserSchemas) -> schema.UserSchemas:
+    user.password = hash_password(user.password) if user.password else None
     updated_user = await crud.update_exist_user(user)
     if updated_user:
         return schema.UserSchemas(
