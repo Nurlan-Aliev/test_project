@@ -9,6 +9,7 @@ def create_jwt(
 ) -> str:
 
     jwt_pyload = {
+        "id": user.id,
         "email": user.email,
         "status": user.status,
         "is_active": user.is_active,
