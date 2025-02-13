@@ -34,5 +34,4 @@ async def update_acc(
 
 @router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_acc(account: schemas.DeleteAccountSchemas):
-
     await delete_account(account)

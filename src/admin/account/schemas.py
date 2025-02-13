@@ -6,7 +6,7 @@ class BaseAccountSchemas(BaseModel):
 
 
 class CreateAccount(BaseAccountSchemas):
-    email: EmailStr
+    user_id: int
 
 
 class AccountSchema(BaseAccountSchemas):
