@@ -13,7 +13,9 @@ class User(Base):
     status: Mapped[str] = mapped_column(String(10), default="user")
     email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     is_active: Mapped[bool] = mapped_column(server_default=text("true"), default=True)
-    accounts: Mapped[List["Account"]] = relationship("Account", back_populates="user")
+    accounts: Mapped[List["Account"]] = relationship(
+        "Account", back_populates="user", cascade="all, delete"
+    )
 
 
 class Account(Base):
@@ -24,7 +26,7 @@ class Account(Base):
     user: Mapped["User"] = relationship("User", back_populates="accounts")
     is_active: Mapped[bool] = mapped_column(server_default=text("true"), default=True)
     transactions: Mapped[List["Transaction"]] = relationship(
-        "Transaction", back_populates="account"
+        "Transaction", back_populates="account", cascade="all, delete"
     )
 
 
