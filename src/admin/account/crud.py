@@ -6,7 +6,7 @@ from src.admin.account import schemas
 
 
 async def create_new_account(account: schemas.CreateAccount) -> Account:
-    user = await get_user(account.email)
+    user = await get_user(account.user_id)
     if user:
         account = Account(
             balance=account.balance,
@@ -35,6 +35,5 @@ async def delete_account(account: schemas.DeleteAccountSchemas):
     async with db_helper.async_session() as session:
         acc = await session.get(Account, account.id)
         if acc:
-            acc.is_active = False
+            await session.delete(acc)
             await session.commit()
-            return acc

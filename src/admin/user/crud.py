@@ -1,7 +1,7 @@
-from sqlalchemy import select, update
+from sqlalchemy import select, delete
 from src.admin.user import schema
 from src.database import db_helper
-from src.models import User, Account
+from src.models import User
 from sqlalchemy.orm import subqueryload
 
 
@@ -44,11 +44,8 @@ async def update_exist_user(user: schema.UpdateUserSchemas):
 
 
 async def delete_exist_user(user: schema.DeleteUserSchemas):
-    stmt = update(Account).where(Account.user_id == user.id).values(is_active=False)
-
     async with db_helper.async_session() as session:
         user_exist = await session.get(User, user.id)
         if user_exist:
-            user_exist.is_active = False
-            await session.execute(stmt)
+            await session.delete(user_exist)
             await session.commit()
